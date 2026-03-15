@@ -1,0 +1,15 @@
+:root {
+  --habit-primary: #4ade80;
+  --habit-secondary: #f0fdf4;
+  --habit-accent: #2d6a4f;
+  --habit-soft-blue: #e0f2fe;
+  --habit-font-sans: Inter, system-ui, sans-serif;
+}
+
+@theme inline {
+  --color-habit-primary: var(--habit-primary);
+  --color-habit-secondary: var(--habit-secondary);
+  --color-habit-accent: var(--habit-accent);
+  --color-habit-soft-blue: var(--habit-soft-blue);
+  --font-sans: var(--habit-font-sans);
+}
