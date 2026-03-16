@@ -1,4 +1,4 @@
-import LandingHero from "@/shared/LandingPage/LandingPage";
+import LandingHero from "@/widgets/LandingPage/ui/LandingPage";
 
 export default function Home() {
   return (

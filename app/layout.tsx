@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 
-import Header from "@/shared/Header/Header";
+import Header from "@/widgets/Header/ui/Header";
 
 export const metadata: Metadata = {
   title: "HabitFlow - Transform Your Life, One Habit at a Time",

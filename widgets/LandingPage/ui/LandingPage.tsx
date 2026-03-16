@@ -1,7 +1,13 @@
 "use client";
 
-import SplitText from "@/components/SplitText/SplitText";
-import { cubicBezier, motion } from "motion/react";
+import {
+    fadeUpVariants,
+    revealViewport,
+    softScaleVariants,
+    staggeredRevealVariants
+} from "@/shared/lib/animations";
+import SplitText from "@/shared/ui/SplitText/SplitText";
+import { motion } from "motion/react";
 
 import Image from "next/image";
 import phone from "@/images/phone.png";
@@ -9,8 +15,6 @@ import phone from "@/images/phone.png";
 import Link from "next/link";
 
 const LinkButton = motion.create(Link);
-
-const revealEase = cubicBezier(0.22, 1, 0.36, 1);
 
 const heroStats = [
     { value: "2 min", label: "daily reset" },
@@ -30,59 +34,12 @@ const benefitPills = [
     "Built for busy days"
 ];
 
-const heroViewport = {
-    once: true,
-    amount: 0.35
-};
-
-const heroVariants = {
-    hidden: {},
-    visible: {
-        transition: {
-            staggerChildren: 0.14,
-            delayChildren: 0.08
-        }
-    }
-};
-
-const revealUpVariants = {
-    hidden: {
-        opacity: 0,
-        y: 32,
-        filter: "blur(10px)"
-    },
-    visible: {
-        opacity: 1,
-        y: 0,
-        filter: "blur(0px)",
-        transition: {
-            duration: 0.7,
-            ease: revealEase
-        }
-    }
-};
-
-const glowVariants = {
-    hidden: {
-        opacity: 0,
-        scale: 0.82
-    },
-    visible: {
-        opacity: 1,
-        scale: 1,
-        transition: {
-            duration: 0.9,
-            ease: revealEase
-        }
-    }
-};
-
 export default function LandingHero() {
     return (
         <motion.section
             initial="hidden"
             whileInView="visible"
-            viewport={heroViewport}
+            viewport={revealViewport}
             className="relative isolate flex min-h-[calc(100dvh-72px)] items-center overflow-hidden bg-habit-secondary"
         >
             <div
@@ -95,7 +52,7 @@ export default function LandingHero() {
             />
             <motion.div
                 aria-hidden="true"
-                variants={glowVariants}
+                variants={softScaleVariants}
                 className="pointer-events-none absolute left-1/2 top-6 h-72 w-72 -translate-x-1/2 rounded-full bg-habit-primary/20 blur-3xl md:left-[68%] md:top-16 md:h-96 md:w-96"
             />
             <div
@@ -108,18 +65,18 @@ export default function LandingHero() {
             />
             <motion.div className="mx-auto grid w-full max-w-310 items-center gap-10 px-4 py-8 sm:px-6 md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] md:px-10 md:py-14">
                 <motion.div
-                    variants={heroVariants}
+                    variants={staggeredRevealVariants}
                     className="relative z-10 flex w-full flex-col justify-center gap-5 md:gap-6"
                 >
                     <motion.div
-                        variants={revealUpVariants}
+                        variants={fadeUpVariants}
                         className="max-w-fit rounded-full border border-white/80 bg-white/80 px-3.5 py-1.5 shadow-[0_12px_40px_rgba(148,163,184,0.14)] backdrop-blur"
                     >
                         <span className="text-[10px] font-black uppercase tracking-[0.24em] text-habit-accent/85 sm:text-[11px]">
                             Minimalist habit system
                         </span>
                     </motion.div>
-                    <motion.div variants={revealUpVariants} className="max-w-fit">
+                    <motion.div variants={fadeUpVariants} className="max-w-fit">
                         <SplitText
                             tag="h1"
                             className="max-w-[50ch] text-balance text-[clamp(2.95rem,14vw,6.5rem)] font-black leading-[0.88] tracking-[-0.06em] text-[#121936]"
@@ -134,13 +91,13 @@ export default function LandingHero() {
                         </SplitText>
                     </motion.div>
                     <motion.div
-                        variants={revealUpVariants}
+                        variants={fadeUpVariants}
                         className="max-w-136 text-left text-[15px] leading-6 font-semibold text-slate-600 sm:text-[17px]"
                     >
                         The minimalist habit tracker designed to help you build consistency, stay motivated, and reach your goals without the clutter.
                     </motion.div>
                     <motion.div
-                        variants={revealUpVariants}
+                        variants={fadeUpVariants}
                         className="grid w-full max-w-md grid-cols-1 gap-3 pt-1 sm:grid-cols-2"
                     >
                         <LinkButton
@@ -157,13 +114,13 @@ export default function LandingHero() {
                         </LinkButton>
                     </motion.div>
                     <motion.div
-                        variants={heroVariants}
+                        variants={staggeredRevealVariants}
                         className="grid w-full grid-cols-3 gap-2 pt-1 sm:max-w-lg sm:gap-3"
                     >
                         {heroStats.map((stat) => (
                             <motion.div
                                 key={stat.label}
-                                variants={revealUpVariants}
+                                variants={fadeUpVariants}
                                 className="rounded-2xl border border-white/80 bg-white/75 px-3 py-3 shadow-[0_14px_30px_rgba(148,163,184,0.12)] backdrop-blur"
                             >
                                 <div className="text-[13px] font-black text-[#121936] sm:text-[15px]">
@@ -176,7 +133,7 @@ export default function LandingHero() {
                         ))}
                     </motion.div>
                     <motion.div
-                        variants={revealUpVariants}
+                        variants={fadeUpVariants}
                         className="flex max-w-xl flex-wrap gap-2"
                     >
                         {benefitPills.map((pill) => (
@@ -188,7 +145,7 @@ export default function LandingHero() {
                             </span>
                         ))}
                     </motion.div>
-                    <motion.div variants={revealUpVariants} className="pt-2 md:hidden">
+                    <motion.div variants={fadeUpVariants} className="pt-2 md:hidden">
                         <div className="relative overflow-hidden rounded-4xl border border-white/80 bg-white/76 p-4 shadow-[0_30px_80px_rgba(15,23,42,0.12)] backdrop-blur">
                             <div
                                 aria-hidden="true"
@@ -237,7 +194,7 @@ export default function LandingHero() {
                         </div>
                     </motion.div>
                 </motion.div>
-                <motion.div className="relative hidden md:flex md:items-center md:justify-center" variants={revealUpVariants}>
+                <motion.div className="relative hidden md:flex md:items-center md:justify-center" variants={fadeUpVariants}>
                     <div className="relative w-full max-w-xl rounded-[2.75rem] border border-white/75 bg-white/70 p-6 shadow-[0_40px_100px_rgba(15,23,42,0.14)] backdrop-blur">
                         <div
                             aria-hidden="true"
