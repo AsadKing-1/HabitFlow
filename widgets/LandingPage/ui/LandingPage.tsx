@@ -2,7 +2,6 @@
 
 import {
     fadeUpVariants,
-    revealViewport,
     softScaleVariants,
     staggeredRevealVariants
 } from "@/shared/lib/animations";
@@ -38,8 +37,7 @@ export default function LandingHero() {
     return (
         <motion.section
             initial="hidden"
-            whileInView="visible"
-            viewport={revealViewport}
+            animate="visible"
             className="relative isolate flex min-h-[calc(100dvh-72px)] items-center overflow-hidden bg-habit-secondary"
         >
             <div
@@ -61,7 +59,7 @@ export default function LandingHero() {
             />
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute -right-16 bottom-8 h-52 w-52 rounded-full bg-habit-primary/18 blur-3xl"
+                className="pointer-events-none absolute -right-16 bottom-8 h-52 w-52 rounded-full bg-habit-primary/20 blur-3xl"
             />
             <motion.div className="mx-auto grid w-full max-w-310 items-center gap-10 px-4 py-8 sm:px-6 md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] md:px-10 md:py-14">
                 <motion.div
@@ -79,6 +77,9 @@ export default function LandingHero() {
                     <motion.div variants={fadeUpVariants} className="max-w-fit">
                         <SplitText
                             tag="h1"
+                            splitType="words"
+                            delay={36}
+                            duration={0.58}
                             className="max-w-[50ch] text-balance text-[clamp(2.95rem,14vw,6.5rem)] font-black leading-[0.88] tracking-[-0.06em] text-[#121936]"
                         >
                             <span className="block">Transform</span>

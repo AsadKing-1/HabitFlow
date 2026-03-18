@@ -1,83 +1,181 @@
 "use client";
 
-import {
-    fadeUpVariants,
-    revealViewport,
-    softScaleVariants,
-    staggeredRevealVariants
-} from "@/shared/lib/animations";
-import SplitText from "@/shared/ui/SplitText/SplitText";
+import { fadeUpVariants, staggeredRevealVariants } from "@/shared/lib/animations";
 import { motion } from "motion/react";
 
-export default function LoginForm(){
-    return(
-        <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={revealViewport}
-            className="relative isolate flex min-h-[calc(100dvh-72px)] items-center justify-center overflow-hidden bg-habit-secondary/80 px-4 shadow-xl shadow-habit-soft-blue sm:px-6"
+import Link from "next/link";
+
+import AuthField from "./AuthField";
+import AuthShell from "./AuthShell";
+
+const loginMetrics = [
+    { value: "07 days", label: "current streak" },
+    { value: "03 habits", label: "ready today" },
+    { value: "84%", label: "weekly rhythm" },
+];
+
+const loginHighlights = [
+    "A cleaner daily check-in flow that keeps your next action obvious.",
+    "Calm progress snapshots so you can see momentum at a glance.",
+    "A focused routine space designed to get you in and moving quickly.",
+];
+
+function MailIcon() {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="size-5"
         >
-            <motion.div
-                aria-hidden="true"
-                variants={softScaleVariants}
-                className="pointer-events-none absolute left-1/2 top-8 h-64 w-64 -translate-x-1/2 rounded-full bg-habit-primary/20 blur-3xl md:top-16 md:h-80 md:w-80"
+            <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
+            <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
+        </svg>
+    );
+}
+
+function LockIcon() {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="size-5"
+        >
+            <path
+                fillRule="evenodd"
+                d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z"
+                clipRule="evenodd"
             />
-            <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -left-10 top-24 h-40 w-40 rounded-full bg-white/70 blur-3xl"
-            />
-            <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -right-10 bottom-12 h-48 w-48 rounded-full bg-habit-primary/15 blur-3xl"
-            />
-            <motion.div
+        </svg>
+    );
+}
+
+export default function LoginForm() {
+    return (
+        <AuthShell
+            badge="Resume your flow"
+            spotlight="Your routine is ready when you are."
+            spotlightCopy="Step back into HabitFlow with a calmer sign-in experience and a dashboard built to get you moving without friction."
+            metrics={loginMetrics}
+            highlights={loginHighlights}
+            eyebrow="Sign in"
+            title="Welcome back"
+            description="Review today&apos;s habits, recover your streak, and keep the day moving with a cleaner, more focused entry point."
+        >
+            <motion.form
                 variants={staggeredRevealVariants}
-                className="relative z-10 flex w-full max-w-[30rem] flex-col items-center"
+                className="space-y-5"
+                action=""
             >
-                <motion.div variants={fadeUpVariants} className="max-w-fit">
-                    <SplitText
-                        text="Welcome Back"
-                        className="text-[35px] font-bold md:text-[40px]"
+                <motion.div
+                    variants={fadeUpVariants}
+                    className="grid gap-3 rounded-[28px] border border-emerald-100 bg-emerald-50/60 p-4 sm:grid-cols-[1fr_auto]"
+                >
+                    <div>
+                        <p className="text-[12px] font-black uppercase tracking-[0.18em] text-habit-accent">
+                            Quick return
+                        </p>
+                        <p className="mt-2 text-[14px] font-semibold leading-6 text-slate-600">
+                            Sign in to pick up your streak, check what is due today, and get back to your flow in one stop.
+                        </p>
+                    </div>
+                    <div className="flex items-start sm:items-center">
+                        <div className="rounded-2xl bg-white px-4 py-3 text-right shadow-[0_16px_32px_rgba(74,222,128,0.12)]">
+                            <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                                Best for
+                            </div>
+                            <div className="mt-1 text-[15px] font-black tracking-[-0.03em] text-slate-900">
+                                Daily check-ins
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
+
+                <motion.div variants={fadeUpVariants}>
+                    <AuthField
+                        id="login-email"
+                        name="email"
+                        type="email"
+                        label="Email Address"
+                        placeholder="name@example.com"
+                        autoComplete="email"
+                        icon={<MailIcon />}
                     />
                 </motion.div>
+
+                <motion.div variants={fadeUpVariants}>
+                    <AuthField
+                        id="login-password"
+                        name="password"
+                        type="password"
+                        label="Password"
+                        placeholder="Enter your password"
+                        autoComplete="current-password"
+                        icon={<LockIcon />}
+                        hint="Secure entry"
+                    />
+                </motion.div>
+
+                <motion.div
+                    variants={fadeUpVariants}
+                    className="flex flex-col gap-3 rounded-3xl border border-slate-200 bg-slate-50/80 p-4 sm:flex-row sm:items-center sm:justify-between"
+                >
+                    <label
+                        htmlFor="remember-me"
+                        className="flex items-center gap-3 text-[14px] font-semibold text-slate-600"
+                    >
+                        <input
+                            id="remember-me"
+                            type="checkbox"
+                            className="size-4 rounded border-slate-300 accent-habit-primary"
+                        />
+                        Keep me signed in on this device
+                    </label>
+                    <button
+                        type="button"
+                        className="text-left text-[14px] font-bold text-habit-accent transition-colors hover:text-[#1d4f3c]"
+                    >
+                        Forgot password?
+                    </button>
+                </motion.div>
+
+                <motion.div variants={fadeUpVariants} className="pt-1">
+                    <button className="group flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#121936] px-5 py-4 text-[15px] font-black text-white shadow-[0_24px_50px_rgba(15,23,42,0.18)] transition-transform duration-200 hover:-translate-y-0.5">
+                        <span>Sign In to HabitFlow</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14m-6-6 6 6-6 6" />
+                        </svg>
+                    </button>
+                </motion.div>
+
                 <motion.p
                     variants={fadeUpVariants}
-                    className="text-center text-[14px] font-semibold text-habit-primary md:text-[16px]"
+                    className="rounded-[22px] border border-slate-200 bg-white px-4 py-3 text-[13px] font-semibold leading-6 text-slate-500"
                 >
-                    Pick up your streak and keep the momentum going.
+                    Tip: use the same email you normally track with so your progress stays in one clean history.
                 </motion.p>
-                <motion.form
-                    variants={fadeUpVariants}
-                    className="mt-4 flex w-full flex-col gap-2 rounded-3xl border border-slate-200 bg-white p-8 shadow-2xl shadow-habit-soft-blue md:max-w-[30rem]"
-                    action=""
+            </motion.form>
+
+            <motion.div
+                variants={fadeUpVariants}
+                className="mt-6 flex flex-col gap-3 border-t border-slate-200 pt-6 text-[14px] font-semibold text-slate-500 sm:flex-row sm:items-center sm:justify-between"
+            >
+                <p>New here? Start building your rhythm in under five minutes.</p>
+                <Link
+                    href="/register"
+                    className="font-black text-habit-accent transition-colors hover:text-[#1d4f3c]"
                 >
-                    <label htmlFor="login-email" className="font-semibold">Email Address</label>
-                    <div className="relative">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="absolute top-3.25 left-3 size-6 text-slate-400">
-                            <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
-                            <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
-                        </svg>
-                        <input className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 pl-11 placeholder:font-semibold" id="login-email" type="email" placeholder="Email Address" />
-                    </div>
-                    <label htmlFor="login-password" className="font-semibold">Password</label>
-                    <div className="relative">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="absolute top-3.25 left-3 size-6 text-slate-400">
-                            <path fillRule="evenodd" d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z" clipRule="evenodd" />
-                        </svg>
-                        <input className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 pl-11 placeholder:font-semibold" id="login-password" type="password" placeholder="Password" />
-                    </div>
-                    <div className="mt-1 flex items-center justify-between gap-3 text-[13px] font-semibold text-slate-500">
-                        <label htmlFor="remember-me" className="flex items-center gap-2">
-                            <input id="remember-me" type="checkbox" className="size-4 rounded border-slate-300 accent-habit-primary" />
-                            Remember me
-                        </label>
-                        <button type="button" className="text-habit-accent">Forgot password?</button>
-                    </div>
-                    <div className="mt-2">
-                        <button className="w-full rounded-xl bg-habit-primary p-4 font-bold text-white shadow-md shadow-habit-soft-blue">Sign In</button>
-                    </div>
-                </motion.form>
+                    Create an account
+                </Link>
             </motion.div>
-        </motion.section>
-    )
+        </AuthShell>
+    );
 }

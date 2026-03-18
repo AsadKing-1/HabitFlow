@@ -6,6 +6,15 @@ import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger, GSAPSplitText, useGSAP);
 
+function areFontsReady() {
+    if (typeof document === 'undefined') return true;
+
+    const fontSet = document.fonts;
+    if (!fontSet) return true;
+
+    return fontSet.status === 'loaded';
+}
+
 export interface SplitTextProps {
     text?: string;
     children?: React.ReactNode;
@@ -42,9 +51,7 @@ const SplitText: React.FC<SplitTextProps> = ({
     const ref = useRef<HTMLElement | null>(null);
     const animationCompletedRef = useRef(false);
     const onCompleteRef = useRef(onLetterAnimationComplete);
-    const [fontsLoaded, setFontsLoaded] = useState<boolean>(
-        () => typeof document !== 'undefined' && document.fonts.status === 'loaded'
-    );
+    const [fontsLoaded, setFontsLoaded] = useState<boolean>(areFontsReady);
     const hasContent = Boolean(text?.trim()) || React.Children.count(children) > 0;
 
     // Keep callback ref updated
@@ -55,9 +62,12 @@ const SplitText: React.FC<SplitTextProps> = ({
     useEffect(() => {
         if (fontsLoaded || typeof document === 'undefined') return;
 
+        const fontSet = document.fonts;
+        if (!fontSet) return;
+
         let isMounted = true;
 
-        document.fonts.ready.then(() => {
+        fontSet.ready.then(() => {
             if (isMounted) {
                 setFontsLoaded(true);
             }
