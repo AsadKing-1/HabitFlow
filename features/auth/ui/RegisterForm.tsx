@@ -8,6 +8,13 @@ import Link from "next/link";
 import AuthField from "./AuthField";
 import AuthShell from "./AuthShell";
 
+import type { FormEvent } from "react";
+
+import { useAuth } from "../model/useAuth";
+import { useValidation } from "../model/useValidation";
+import { useState } from "react";
+import { FormErrors, RegisterProfileDraft } from "@/types/type";
+
 const registerMetrics = [
   { value: "05 min", label: "to get started" },
   { value: "Tiny wins", label: "stack daily" },
@@ -36,7 +43,6 @@ function UserIcon() {
     </svg>
   );
 }
-
 function MailIcon() {
   return (
     <svg
@@ -50,7 +56,6 @@ function MailIcon() {
     </svg>
   );
 }
-
 function LockIcon() {
   return (
     <svg
@@ -69,6 +74,35 @@ function LockIcon() {
 }
 
 export default function RegisterForm() {
+
+  const { registerValues, updateRegisterField } = useAuth();
+  const { validateRegisterForm } = useValidation();
+
+  const [errors, setErrors] = useState<FormErrors<RegisterProfileDraft>>({});
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const result = validateRegisterForm(registerValues);
+    if (!result.isValid) {
+      setErrors(result.errors);
+      return;
+    }
+    setErrors({});
+    console.log("form is valid", registerValues)
+  }
+
+  const handleFieldChange = <TField extends keyof RegisterProfileDraft>(
+    field: TField,
+    value: RegisterProfileDraft[TField],
+  ) => {
+    updateRegisterField(field, value);
+
+    setErrors((current) => ({
+      ...current,
+      [field]: undefined,
+    }));
+  };
+
   return (
     <AuthShell
       badge="Start fresh"
@@ -83,7 +117,7 @@ export default function RegisterForm() {
       <motion.form
         variants={staggeredRevealVariants}
         className="space-y-5"
-        action=""
+        onSubmit={handleSubmit}
       >
         <motion.div
           variants={fadeUpVariants}
@@ -118,6 +152,9 @@ export default function RegisterForm() {
             placeholder="Your full name"
             autoComplete="name"
             icon={<UserIcon />}
+            value={registerValues.name}
+            onChange={(e) => handleFieldChange("name", e.target.value)}
+            description={errors.name}
           />
         </motion.div>
 
@@ -130,6 +167,9 @@ export default function RegisterForm() {
             placeholder="name@example.com"
             autoComplete="email"
             icon={<MailIcon />}
+            value={registerValues.email}
+            onChange={(e) => handleFieldChange("email", e.target.value)}
+            description={errors.email}
           />
         </motion.div>
 
@@ -145,7 +185,10 @@ export default function RegisterForm() {
             placeholder="Create a password"
             autoComplete="new-password"
             icon={<LockIcon />}
-            hint="At least 8 characters"
+            hint=""
+            value={registerValues.password}
+            onChange={(e) => handleFieldChange("password", e.target.value)}
+            description={errors.password}
           />
           <AuthField
             id="confirm-password"
@@ -155,6 +198,9 @@ export default function RegisterForm() {
             placeholder="Repeat your password"
             autoComplete="new-password"
             icon={<LockIcon />}
+            value={registerValues.confirmPassword}
+            onChange={(e) => handleFieldChange("confirmPassword", e.target.value)}
+            description={errors.confirmPassword}
           />
         </motion.div>
 
@@ -169,14 +215,20 @@ export default function RegisterForm() {
             <input
               id="terms"
               type="checkbox"
-              className="mt-1 size-4 rounded border-slate-300 accent-habit-primary"
+              checked={registerValues.agreedToTerms}
+              onChange={(ev) => {
+                handleFieldChange("agreedToTerms", ev.target.checked)
+              }}
+              className={`mt-1 size-4 rounded border-slate-300 accent-habit-primary`}
             />
             I agree to create my HabitFlow account and use this profile to track my habits and progress.
           </label>
         </motion.div>
 
+        {errors.agreedToTerms ? <p>{errors.agreedToTerms}</p> : null}
+
         <motion.div variants={fadeUpVariants} className="pt-1">
-          <button className="group flex w-full items-center justify-center gap-2 rounded-[22px] bg-habit-primary px-5 py-4 text-[15px] font-black text-white shadow-[0_24px_48px_rgba(74,222,128,0.28)] transition-transform duration-200 hover:-translate-y-0.5">
+          <button type="submit" disabled={!registerValues.agreedToTerms} className="group flex w-full items-center justify-center gap-2 rounded-[22px] bg-habit-primary px-5 py-4 text-[15px] font-black text-white shadow-[0_24px_48px_rgba(74,222,128,0.28)] transition-transform duration-200 hover:-translate-y-0.5 disabled:opacity-50 disabled:bg-gray-400 disabled:shadow-none">
             <span>Create Account</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"

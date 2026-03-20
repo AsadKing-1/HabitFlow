@@ -21,7 +21,7 @@ function createInitialLoginValues(): LoginCredentials {
     };
 }
 
-export default function useAuth(){
+export function useAuth(){
 
     const [registerValues, setRegisterValues] = useState<RegisterProfileDraft>(createInitialRegisterValues);
     const [loginValues, setLoginValues] = useState<LoginCredentials>(createInitialLoginValues);
