@@ -15,6 +15,8 @@ import { useValidation } from "../model/useValidation";
 import { useState } from "react";
 import { FormErrors, RegisterProfileDraft } from "@/types/type";
 
+import { supabase } from "@/lib/supabase";
+
 const registerMetrics = [
   { value: "05 min", label: "to get started" },
   { value: "Tiny wins", label: "stack daily" },
@@ -75,20 +77,56 @@ function LockIcon() {
 
 export default function RegisterForm() {
 
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [submitError, setSubmitError] = useState<string>("");
+  const [submitSuccess, setSubmitSuccess] = useState<string>("");
+
+
   const { registerValues, updateRegisterField } = useAuth();
   const { validateRegisterForm } = useValidation();
 
   const [errors, setErrors] = useState<FormErrors<RegisterProfileDraft>>({});
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    setSubmitError("")
+    setSubmitSuccess("");
+
     const result = validateRegisterForm(registerValues);
+
     if (!result.isValid) {
       setErrors(result.errors);
       return;
     }
     setErrors({});
-    console.log("form is valid", registerValues)
+    setIsSubmitting(true)
+
+    const { error } = await supabase.auth.signUp({
+      email: registerValues.email,
+      password: registerValues.password,
+      options: {
+        data: {
+          full_name: registerValues.name
+        }
+      }
+    });
+
+    if (error) {
+      setSubmitError(error.message);
+    } else {
+      setSubmitSuccess("Account created. Check Your Email.")
+    }
+
+    if(submitSuccess === "Account created. Check Your Email."){
+      updateRegisterField("name", "");
+      updateRegisterField("email", "");
+      updateRegisterField("password", "");
+      updateRegisterField("confirmPassword", "");
+      updateRegisterField("agreedToTerms", false);
+    }
+
+    setIsSubmitting(false);
   }
 
   const handleFieldChange = <TField extends keyof RegisterProfileDraft>(
@@ -228,8 +266,8 @@ export default function RegisterForm() {
         {errors.agreedToTerms ? <p>{errors.agreedToTerms}</p> : null}
 
         <motion.div variants={fadeUpVariants} className="pt-1">
-          <button type="submit" disabled={!registerValues.agreedToTerms} className="group flex w-full items-center justify-center gap-2 rounded-[22px] bg-habit-primary px-5 py-4 text-[15px] font-black text-white shadow-[0_24px_48px_rgba(74,222,128,0.28)] transition-transform duration-200 hover:-translate-y-0.5 disabled:opacity-50 disabled:bg-gray-400 disabled:shadow-none">
-            <span>Create Account</span>
+          <button type="submit" disabled={isSubmitting || !registerValues.agreedToTerms} className="group flex w-full items-center justify-center gap-2 rounded-[22px] bg-habit-primary px-5 py-4 text-[15px] font-black text-white shadow-[0_24px_48px_rgba(74,222,128,0.28)] transition-transform duration-200 hover:-translate-y-0.5 disabled:opacity-50 disabled:bg-gray-400 disabled:shadow-none">
+            <span>{isSubmitting ? "Creating..." : "Create Account"}</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -241,6 +279,8 @@ export default function RegisterForm() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14m-6-6 6 6-6 6" />
             </svg>
           </button>
+          {submitError ? <p>{submitError}</p> : null}
+          {submitSuccess ? <p className="text-[14px] font-semibold text-habit-accent/60 ml-1 mt-5">✔️ {submitSuccess}</p> : null}
         </motion.div>
 
         <motion.div

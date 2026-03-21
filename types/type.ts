@@ -20,7 +20,6 @@ export type RegisterProfileDraft = ProfileDraft & {
 export type LoginCredentials = {
   email: string;
   password: string;
-  rememberMe: boolean;
 };
 
 // ========================== Ключи Полей ================================ //

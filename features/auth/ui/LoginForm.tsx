@@ -3,10 +3,20 @@
 import { fadeUpVariants, staggeredRevealVariants } from "@/shared/lib/animations";
 import { motion } from "motion/react";
 
+import { useValidation } from "../model/useValidation";
+import { supabase } from "@/lib/supabase";
+
+import { useRouter } from "next/navigation";
+
+import { FormErrors, LoginCredentials } from "@/types/type";
+import { FormEvent } from "react";
+import { useState } from "react";
+
 import Link from "next/link";
 
 import AuthField from "./AuthField";
 import AuthShell from "./AuthShell";
+import { useAuth } from "../model/useAuth";
 
 const loginMetrics = [
     { value: "07 days", label: "current streak" },
@@ -52,6 +62,51 @@ function LockIcon() {
 }
 
 export default function LoginForm() {
+
+    const router = useRouter();
+
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const [submitError, setSubmitError] = useState<string>("");
+    const [submitSuccess, setSubmitSuccess] = useState<string>("");
+
+    const { loginValues, updateLoginField } = useAuth();
+    const { validateLoginForm } = useValidation();
+
+    const [errors, setErrors] = useState<FormErrors<LoginCredentials>>({});
+
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        setSubmitError("")
+        setSubmitSuccess("");
+
+        const result = validateLoginForm(loginValues);
+        if (!result.isValid) {
+            setErrors(result.errors);
+            return;
+        }
+
+        setErrors({});
+        setIsSubmitting(true);
+
+        const { error } = await supabase.auth.signInWithPassword({
+            email: loginValues.email,
+            password: loginValues.password,
+        });
+
+        if (error) {
+            setSubmitError(error.message);
+        } else {
+            setSubmitSuccess("Success Sign In!")
+        }
+        setSubmitSuccess("Success Sign In!");
+        
+        if (submitSuccess === "Success Sign In!") {
+            router.push("/dashboard");
+        }
+        setIsSubmitting(false);
+    }
+
     return (
         <AuthShell
             badge="Resume your flow"
@@ -66,7 +121,7 @@ export default function LoginForm() {
             <motion.form
                 variants={staggeredRevealVariants}
                 className="space-y-5"
-                action=""
+                onSubmit={handleSubmit}
             >
                 <motion.div
                     variants={fadeUpVariants}
@@ -101,6 +156,8 @@ export default function LoginForm() {
                         placeholder="name@example.com"
                         autoComplete="email"
                         icon={<MailIcon />}
+                        value={loginValues.email}
+                        onChange={(e) => updateLoginField("email", e.target.value)}
                     />
                 </motion.div>
 
@@ -114,34 +171,13 @@ export default function LoginForm() {
                         autoComplete="current-password"
                         icon={<LockIcon />}
                         hint="Secure entry"
+                        value={loginValues.password}
+                        onChange={(e) => updateLoginField("password", e.target.value)}
                     />
                 </motion.div>
 
-                <motion.div
-                    variants={fadeUpVariants}
-                    className="flex flex-col gap-3 rounded-3xl border border-slate-200 bg-slate-50/80 p-4 sm:flex-row sm:items-center sm:justify-between"
-                >
-                    <label
-                        htmlFor="remember-me"
-                        className="flex items-center gap-3 text-[14px] font-semibold text-slate-600"
-                    >
-                        <input
-                            id="remember-me"
-                            type="checkbox"
-                            className="size-4 rounded border-slate-300 accent-habit-primary"
-                        />
-                        Keep me signed in on this device
-                    </label>
-                    <button
-                        type="button"
-                        className="text-left text-[14px] font-bold text-habit-accent transition-colors hover:text-[#1d4f3c]"
-                    >
-                        Forgot password?
-                    </button>
-                </motion.div>
-
                 <motion.div variants={fadeUpVariants} className="pt-1">
-                    <button className="group flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#121936] px-5 py-4 text-[15px] font-black text-white shadow-[0_24px_50px_rgba(15,23,42,0.18)] transition-transform duration-200 hover:-translate-y-0.5">
+                    <button disabled={isSubmitting} className="group flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#121936] px-5 py-4 text-[15px] font-black text-white shadow-[0_24px_50px_rgba(15,23,42,0.18)] transition-transform duration-200 hover:-translate-y-0.5">
                         <span>Sign In to HabitFlow</span>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
