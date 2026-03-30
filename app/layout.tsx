@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 
-import Header from "@/widgets/Header/ui/Header";
-
 export const metadata: Metadata = {
   title: "HabitFlow - Transform Your Life, One Habit at a Time",
 };
@@ -14,8 +12,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="overflow-x-hidden text-slate-800">
-        <Header/>
+      <body className="text-slate-800">
         {children}
       </body>
     </html>

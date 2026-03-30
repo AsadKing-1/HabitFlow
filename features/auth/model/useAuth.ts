@@ -17,7 +17,6 @@ function createInitialLoginValues(): LoginCredentials {
     return {
         email: "",
         password: "",
-        rememberMe: false,
     };
 }
 

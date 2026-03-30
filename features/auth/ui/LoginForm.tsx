@@ -3,8 +3,9 @@
 import { fadeUpVariants, staggeredRevealVariants } from "@/shared/lib/animations";
 import { motion } from "motion/react";
 
+import { supabase } from "@/lib/supabase/client";
+
 import { useValidation } from "../model/useValidation";
-import { supabase } from "@/lib/supabase";
 
 import { useRouter } from "next/navigation";
 
@@ -62,9 +63,7 @@ function LockIcon() {
 }
 
 export default function LoginForm() {
-
     const router = useRouter();
-
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [submitError, setSubmitError] = useState<string>("");
     const [submitSuccess, setSubmitSuccess] = useState<string>("");
@@ -96,16 +95,25 @@ export default function LoginForm() {
 
         if (error) {
             setSubmitError(error.message);
+            console.log(error.message)
         } else {
-            setSubmitSuccess("Success Sign In!")
-        }
-        setSubmitSuccess("Success Sign In!");
-        
-        if (submitSuccess === "Success Sign In!") {
             router.push("/dashboard");
         }
+
         setIsSubmitting(false);
     }
+
+    const handleFieldChange = <TField extends keyof LoginCredentials>(
+        field: TField,
+        value: LoginCredentials[TField],
+    ) => {
+        updateLoginField(field, value);
+
+        setErrors((current) => ({
+            ...current,
+            [field]: undefined,
+        }));
+    };
 
     return (
         <AuthShell
@@ -157,7 +165,7 @@ export default function LoginForm() {
                         autoComplete="email"
                         icon={<MailIcon />}
                         value={loginValues.email}
-                        onChange={(e) => updateLoginField("email", e.target.value)}
+                        onChange={(e) => handleFieldChange("email", e.target.value)}
                     />
                 </motion.div>
 
@@ -172,13 +180,13 @@ export default function LoginForm() {
                         icon={<LockIcon />}
                         hint="Secure entry"
                         value={loginValues.password}
-                        onChange={(e) => updateLoginField("password", e.target.value)}
+                        onChange={(e) => handleFieldChange("password", e.target.value)}
                     />
                 </motion.div>
 
                 <motion.div variants={fadeUpVariants} className="pt-1">
-                    <button disabled={isSubmitting} className="group flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#121936] px-5 py-4 text-[15px] font-black text-white shadow-[0_24px_50px_rgba(15,23,42,0.18)] transition-transform duration-200 hover:-translate-y-0.5">
-                        <span>Sign In to HabitFlow</span>
+                    <button type="submit" disabled={isSubmitting} className="group flex w-full items-center justify-center gap-2 rounded-[22px] bg-[#121936] px-5 py-4 text-[15px] font-black text-white shadow-[0_24px_50px_rgba(15,23,42,0.18)] transition-transform duration-200 hover:-translate-y-0.5">
+                        <span>{isSubmitting ? "Authenticating..." : "Sign In to HabitFlow"}</span>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"

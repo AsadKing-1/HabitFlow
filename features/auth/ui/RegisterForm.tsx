@@ -5,6 +5,8 @@ import { motion } from "motion/react";
 
 import Link from "next/link";
 
+import { useRouter } from "next/navigation";
+
 import AuthField from "./AuthField";
 import AuthShell from "./AuthShell";
 
@@ -15,7 +17,7 @@ import { useValidation } from "../model/useValidation";
 import { useState } from "react";
 import { FormErrors, RegisterProfileDraft } from "@/types/type";
 
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase/client";
 
 const registerMetrics = [
   { value: "05 min", label: "to get started" },
@@ -76,6 +78,7 @@ function LockIcon() {
 }
 
 export default function RegisterForm() {
+  const router = useRouter();
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string>("");
@@ -115,15 +118,15 @@ export default function RegisterForm() {
     if (error) {
       setSubmitError(error.message);
     } else {
-      setSubmitSuccess("Account created. Check Your Email.")
-    }
+      setSubmitSuccess("Account created. Check Your Email.");
 
-    if(submitSuccess === "Account created. Check Your Email."){
       updateRegisterField("name", "");
       updateRegisterField("email", "");
       updateRegisterField("password", "");
       updateRegisterField("confirmPassword", "");
       updateRegisterField("agreedToTerms", false);
+
+      router.push("/dashboard");
     }
 
     setIsSubmitting(false);
