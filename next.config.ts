@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Allow accessing the dev server from devices on the local network.
+  allowedDevOrigins: ["local-origin.dev", "*.local-origin.dev", "192.168.*.*"],
 };
 
 export default nextConfig;

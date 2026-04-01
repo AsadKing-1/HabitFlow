@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { LoginCredentials, RegisterProfileDraft } from "@/types/type";
+import type { LoginCredentials, RegisterProfileDraft } from "@/types/RegisterTypes";
 
 function createInitialRegisterValues(): RegisterProfileDraft {
     return {

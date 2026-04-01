@@ -67,7 +67,7 @@ export default function DashboardHeader({ full_Name }: DashboardHeaderProps) {
     }, [isOpenMenu]);
 
     return (
-        <header className="relative z-40 flex flex-col gap-4 bg-white p-3 shadow-md">
+        <header className="relative z-40 flex flex-col gap-4 bg-white p-3 shadow-md md:p-5">
             <div className="flex w-full items-center justify-between gap-3">
                 <div>
                     <h1 className="text-[20px] font-extrabold tracking-[-0.03em] md:text-[22px]">HabitFlow</h1>

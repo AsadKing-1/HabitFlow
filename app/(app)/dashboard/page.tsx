@@ -1,13 +1,14 @@
+"use client";
+
+import CurrentHabit from "@/widgets/CurrentHabit/ui/CurrentHabit";
+import DashboardBoard from "@/widgets/DashboardBoard/ui/DashboardBoard";
+
 export default function DashboardPage() {
     return (
-        <main className="flex min-h-[calc(100vh-80px)] items-center justify-center px-6">
-            <div className="rounded-3xl border border-white/80 bg-white/80 px-6 py-5 text-center shadow-[0_24px_60px_rgba(148,163,184,0.16)] backdrop-blur">
-                <p className="text-[12px] font-black uppercase tracking-[0.24em] text-habit-accent/80">
-                    Dashboard
-                </p>
-                <h1 className="mt-2 text-2xl font-black text-slate-900">
-                    Your habit workspace is coming together.
-                </h1>
+        <main className="min-h-[calc(100vh-80px)] px-6">
+            <div className="flex w-full max-w-8xl flex-col justify-center gap-5 md:flex-row md:items-center">
+                <DashboardBoard habitDone={2} streak={4} weeklyRhythm={69} />
+                <CurrentHabit habit={{ id: "1", title: "Drink Water", description: "Stay hydrated throughout the day", createdAt: new Date(), frequency: "daily", daysOfWeek: [1, 2, 3, 4, 5, ], isCompletedToday: false, streak: 4, bestStreak: 6 }} />
             </div>
         </main>
     );

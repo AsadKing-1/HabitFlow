@@ -4,7 +4,7 @@ import type {
   RegisterProfileDraft,
   ValidationResult,
   ValidatorMap,
-} from "@/types/type";
+} from "@/types/RegisterTypes";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

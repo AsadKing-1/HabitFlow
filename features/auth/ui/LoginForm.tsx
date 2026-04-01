@@ -9,7 +9,7 @@ import { useValidation } from "../model/useValidation";
 
 import { useRouter } from "next/navigation";
 
-import { FormErrors, LoginCredentials } from "@/types/type";
+import { FormErrors, LoginCredentials } from "@/types/RegisterTypes";
 import { FormEvent } from "react";
 import { useState } from "react";
 

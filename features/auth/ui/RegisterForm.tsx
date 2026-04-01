@@ -15,7 +15,7 @@ import type { FormEvent } from "react";
 import { useAuth } from "../model/useAuth";
 import { useValidation } from "../model/useValidation";
 import { useState } from "react";
-import { FormErrors, RegisterProfileDraft } from "@/types/type";
+import { FormErrors, RegisterProfileDraft } from "@/types/RegisterTypes";
 
 import { supabase } from "@/lib/supabase/client";
 
