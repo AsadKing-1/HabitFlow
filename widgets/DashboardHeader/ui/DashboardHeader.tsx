@@ -67,12 +67,12 @@ export default function DashboardHeader({ full_Name }: DashboardHeaderProps) {
     }, [isOpenMenu]);
 
     return (
-        <header className="relative z-40 flex flex-col gap-4 bg-white p-3 shadow-md md:p-5">
-            <div className="flex w-full items-center justify-between gap-3">
+        <header className="relative z-40 flex min-w-0 flex-col gap-4 bg-white p-3 shadow-md md:p-5">
+            <div className="flex w-full min-w-0 items-center justify-between gap-3">
                 <div>
                     <h1 className="text-[20px] font-extrabold tracking-[-0.03em] md:text-[22px]">HabitFlow</h1>
                 </div>
-                <div className="hidden items-center gap-5 md:flex">
+                <div className="hidden min-w-0 items-center gap-5 lg:flex">
                     {links.map((link) => (
                         <Link
                             key={link.path}
@@ -83,9 +83,9 @@ export default function DashboardHeader({ full_Name }: DashboardHeaderProps) {
                         </Link>
                     ))}
                 </div>
-                <div className="hidden items-center justify-between gap-4 md:flex">
-                    <div className="flex items-center gap-2">
-                        <span className="font-medium">
+                <div className="hidden min-w-0 items-center justify-between gap-4 lg:flex">
+                    <div className="flex min-w-0 items-center gap-2">
+                        <span className="max-w-36 truncate font-medium xl:max-w-52">
                             {userName}
                         </span>
 
@@ -117,7 +117,7 @@ export default function DashboardHeader({ full_Name }: DashboardHeaderProps) {
                     aria-expanded={isOpenMenu}
                     aria-controls="mobile-navigation"
                     aria-label={isOpenMenu ? "Close navigation menu" : "Open navigation menu"}
-                    className={`relative flex h-11 w-11 items-center justify-center rounded-2xl border text-slate-900 shadow-sm transition md:hidden ${isOpenMenu ? "border-emerald-200 bg-emerald-50" : "border-slate-200 bg-white"}`}
+                    className={`relative flex h-11 w-11 items-center justify-center rounded-2xl border text-slate-900 shadow-sm transition lg:hidden ${isOpenMenu ? "border-emerald-200 bg-emerald-50" : "border-slate-200 bg-white"}`}
                 >
                     <span className={`absolute h-0.5 w-5 rounded-full bg-current transition duration-300 ${isOpenMenu ? "rotate-45" : "-translate-y-1.5"}`} />
                     <span className={`absolute h-0.5 w-5 rounded-full bg-current transition duration-200 ${isOpenMenu ? "opacity-0" : "opacity-100"}`} />
@@ -135,7 +135,7 @@ export default function DashboardHeader({ full_Name }: DashboardHeaderProps) {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.16 }}
-                            className="fixed inset-0 z-30 bg-slate-950/16 md:hidden"
+                            className="fixed inset-0 z-30 bg-slate-950/16 lg:hidden"
                         />
                         <motion.nav
                             id="mobile-navigation"
@@ -143,7 +143,7 @@ export default function DashboardHeader({ full_Name }: DashboardHeaderProps) {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-                            className="absolute left-3 right-3 top-[calc(100%+0.75rem)] z-40 flex flex-col gap-4 overflow-hidden rounded-[28px] border border-emerald-100 bg-white p-5 shadow-[0_18px_38px_rgba(15,23,42,0.12)] md:hidden"
+                            className="absolute left-3 right-3 top-[calc(100%+0.75rem)] z-40 flex flex-col gap-4 overflow-hidden rounded-[28px] border border-emerald-100 bg-white p-5 shadow-[0_18px_38px_rgba(15,23,42,0.12)] lg:hidden"
                             style={{ willChange: "transform, opacity" }}
                         >
                             <div className="flex items-center gap-3 rounded-[22px] bg-habit-secondary px-4 py-3">

@@ -105,10 +105,14 @@ export default function RegisterForm() {
     setErrors({});
     setIsSubmitting(true)
 
-    const { error } = await supabase.auth.signUp({
+    const emailConfirmationUrl = new URL("/auth/confirm", window.location.origin);
+    emailConfirmationUrl.searchParams.set("next", "/dashboard");
+
+    const { data, error } = await supabase.auth.signUp({
       email: registerValues.email,
       password: registerValues.password,
       options: {
+        emailRedirectTo: emailConfirmationUrl.toString(),
         data: {
           full_name: registerValues.name
         }
@@ -118,7 +122,11 @@ export default function RegisterForm() {
     if (error) {
       setSubmitError(error.message);
     } else {
-      setSubmitSuccess("Account created. Check Your Email.");
+      const confirmationMessage = data.session
+        ? "Account created. Redirecting to your dashboard."
+        : "Account created. Check your email to confirm it from this device.";
+
+      setSubmitSuccess(confirmationMessage);
 
       updateRegisterField("name", "");
       updateRegisterField("email", "");
@@ -126,7 +134,9 @@ export default function RegisterForm() {
       updateRegisterField("confirmPassword", "");
       updateRegisterField("agreedToTerms", false);
 
-      router.push("/dashboard");
+      if (data.session) {
+        router.push("/dashboard");
+      }
     }
 
     setIsSubmitting(false);

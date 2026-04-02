@@ -33,9 +33,9 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const publicRoutes = ["/login", "/register"];
+  const publicRoutes = new Set(["/", "/login", "/register", "/auth/confirm"]);
 
-  if (!user && !publicRoutes.includes(request.nextUrl.pathname)) {
+  if (!user && !publicRoutes.has(request.nextUrl.pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);

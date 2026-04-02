@@ -22,7 +22,7 @@ export default function DashboardBoard({
     weeklyRhythm = 85
 }: DashboardBoardProps) {
     return (
-        <section className="w-full min-w-0 flex-6 py-8 sm:py-10">
+        <section className="w-full min-w-0 flex-6 py-6 sm:py-10">
             <div
                 className="relative isolate overflow-hidden rounded-[2.75rem] border border-white/10 px-6 py-8 text-white shadow-[0_32px_90px_rgba(8,21,15,0.3)] sm:px-8 sm:py-10 lg:px-12 lg:py-12"
                 style={{

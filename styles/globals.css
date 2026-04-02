@@ -1,2 +1,8 @@
 @import "tailwindcss";
 @import "./landing.css";
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
